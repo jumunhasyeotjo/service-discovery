@@ -2,9 +2,9 @@ name: Java CI/CD with Gradle
 
 on:
   push:
-    branches: [ "dev" ]
+    branches: [ "featcicd" ]
   pull_request:
-    branches: [ "dev" ]
+    branches: [ "featcicd" ]
 
 concurrency:
   group: shared-server-deployment
@@ -13,7 +13,7 @@ concurrency:
 jobs:
   build-and-deploy:
     runs-on: self-hosted
-    environment: eureka-secret
+    environment: hub-cicd
     permissions:
       contents: read
       packages: read
@@ -67,6 +67,7 @@ jobs:
           echo "JAR deployed"
 
       - name: Update environment variables
+        
         env:
           POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
           POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
@@ -113,6 +114,7 @@ jobs:
           sleep 10
           
           for i in {1..30}; do
+          if lsof -ti:${{ secrets.APP_PORT }} > /dev/null 2>&1; then
            echo "Application is running on port ${{ secrets.APP_PORT }}"
            ps aux | grep app.jar | grep -v grep
            exit 0
@@ -128,6 +130,8 @@ jobs:
           - name: Verify deployment
             run: |
               sleep 5
+              
+              if lsof -ti:${{ secrets.APP_PORT }} > /dev/null; then
                 echo "Deployment successful - Application is running on port ${{ secrets.APP_PORT }}"
               else
                 echo "Deployment failed - Application is not running"
