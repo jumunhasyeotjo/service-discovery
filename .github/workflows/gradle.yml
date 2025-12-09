@@ -2,9 +2,9 @@ name: Java CI/CD with Gradle
 
 on:
   push:
-    branches: [ "featcicd" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "featcicd" ]
+    branches: [ "main" ]
 
 concurrency:
   group: shared-server-deployment
