@@ -13,7 +13,7 @@ concurrency:
 jobs:
   build-and-deploy:
     runs-on: self-hosted
-    environment: hub-cicd
+    environment: eureka-secret
     permissions:
       contents: read
       packages: read
