@@ -17,3 +17,9 @@ eureka:
     hostname: localhost
   server:
     eviction-interval-timer-in-ms: 10000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
